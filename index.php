@@ -3,7 +3,7 @@
 require_once __DIR__ . '/api.php';
 
 $url = 'https://highscores.martindilling.com/api/v1/games';
-$responseJson = json_decode(apiGet($url));
+$response = apiGet($url);
 
 ?>
 <!doctype html>
@@ -25,7 +25,7 @@ $responseJson = json_decode(apiGet($url));
         <div data-player class="player"></div>
         <div data-score class="score"></div>
         <button data-send-button class="send-button">Send</button>
-        <pre data-response-preview class="response-preview"><?php echo $responseJson ? json_encode($responseJson, JSON_PRETTY_PRINT) : '' ?></pre>
+        <pre data-response-preview class="response-preview"><?php echo $response ? json_encode($response, JSON_PRETTY_PRINT) : '' ?></pre>
     </div>
 
     <script>

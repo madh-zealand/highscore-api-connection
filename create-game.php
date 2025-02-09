@@ -6,8 +6,8 @@ $url = 'https://highscores.martindilling.com/api/v1/games';
 $payload = [
     'title' => 'Pirate treasure hunt',
 ];
-$responseJson = json_decode(apiPost($url, $payload));
+$response = apiPost($url, $payload);
 
 echo '<pre>';
-echo json_encode($responseJson, JSON_PRETTY_PRINT);
+echo json_encode($response, JSON_PRETTY_PRINT);
 echo '</pre>';

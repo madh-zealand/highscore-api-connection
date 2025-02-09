@@ -1,6 +1,6 @@
 <?php
 
-function apiGet(string $url)
+function apiCall(string $method, string $url, ?array $payload = null): array
 {
     $token = '6|c1Xknxr4vS7oXm4yTZQeTWx9VUutkWrj4kHFVj9A8f3cba58';
     $headers = [
@@ -11,87 +11,45 @@ function apiGet(string $url)
 
     $curl = curl_init();
     curl_setopt_array($curl, [
+        CURLOPT_CUSTOMREQUEST => $method,
         CURLOPT_URL => $url,
         CURLOPT_HTTPHEADER => $headers,
         CURLOPT_RETURNTRANSFER => true,
     ]);
+    if ($payload) {
+        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($payload, JSON_THROW_ON_ERROR));
+    }
     $responseData = curl_exec($curl);
 
     // Check if the response code indicates an error.
     // 4xx and 5xx are client errors and server errors.
+    // Not a pretty way to handle errors, but will do for now.
     $responseCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
     if ($responseCode >= 400) {
         echo 'HTTP Error: ' . $responseCode;
         echo $responseData;
+        curl_close($curl);
         exit;
     }
 
     curl_close($curl);
 
-    return $responseData;
+    return json_decode($responseData, true, 512, JSON_THROW_ON_ERROR);
 }
 
-function apiPost(string $url, array $payload) {
-    $token = '6|c1Xknxr4vS7oXm4yTZQeTWx9VUutkWrj4kHFVj9A8f3cba58';
-    $headers = [
-        'Accept: application/json',
-        'Content-type: application/json',
-        'Authorization: Bearer ' . $token,
-    ];
-
-    $curl = curl_init();
-    curl_setopt_array($curl, [
-        CURLOPT_URL => $url,
-        CURLOPT_POST => true,
-        CURLOPT_POSTFIELDS => json_encode($payload),
-        CURLOPT_HTTPHEADER => $headers,
-        CURLOPT_RETURNTRANSFER => true,
-    ]);
-    $responseData = curl_exec($curl);
-
-    // Check if the response code indicates an error.
-    // 4xx and 5xx are client errors and server errors.
-    $responseCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-    if ($responseCode >= 400) {
-        echo 'HTTP Error: ' . $responseCode;
-        echo $responseData;
-        exit;
-    }
-
-    curl_close($curl);
-
-    return $responseData;
+function apiGet(string $url): array
+{
+    return apiCall('GET', $url);
 }
 
-function apiDelete(string $url) {
-    $token = '6|c1Xknxr4vS7oXm4yTZQeTWx9VUutkWrj4kHFVj9A8f3cba58';
-    $headers = [
-        'Accept: application/json',
-        'Content-type: application/json',
-        'Authorization: Bearer ' . $token,
-    ];
+function apiPost(string $url, array $payload): array
+{
+    return apiCall('POST', $url, $payload);
+}
 
-    $curl = curl_init();
-    curl_setopt_array($curl, [
-        CURLOPT_URL => $url,
-        CURLOPT_CUSTOMREQUEST => 'DELETE',
-        CURLOPT_HTTPHEADER => $headers,
-        CURLOPT_RETURNTRANSFER => true,
-    ]);
-    $responseData = curl_exec($curl);
-
-    // Check if the response code indicates an error.
-    // 4xx and 5xx are client errors and server errors.
-    $responseCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-    if ($responseCode >= 400) {
-        echo 'HTTP Error: ' . $responseCode;
-        echo $responseData;
-        exit;
-    }
-
-    curl_close($curl);
-
-    return $responseData;
+function apiDelete(string $url): array
+{
+    return apiCall('DELETE', $url);
 }
 
 
