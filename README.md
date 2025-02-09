@@ -1,1 +1,1 @@
-# highscore-api-connection
+# Highscore API Connection
