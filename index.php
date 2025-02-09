@@ -1,22 +1,10 @@
 <?php
-    $token = '6|c1Xknxr4vS7oXm4yTZQeTWx9VUutkWrj4kHFVj9A8f3cba58';
-    $url = 'https://highscores.martindilling.com/api/v1/games';
-    $headers = [
-        'Accept: application/json',
-        'Content-type: application/json',
-        'Authorization: Bearer ' . $token,
-    ];
 
-    $curl = curl_init();
-    curl_setopt_array($curl, [
-        CURLOPT_URL => $url,
-        CURLOPT_HTTPHEADER => $headers,
-        CURLOPT_RETURNTRANSFER => true,
-    ]);
-    $responseData = curl_exec($curl);
-    curl_close($curl);
+require_once __DIR__ . '/api.php';
 
-    $responseJson = json_decode($responseData);
+$url = 'https://highscores.martindilling.com/api/v1/games';
+$responseJson = json_decode(apiGet($url));
+
 ?>
 <!doctype html>
 <html lang="en">
