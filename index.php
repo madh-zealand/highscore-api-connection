@@ -71,7 +71,6 @@
                     responsePreviewElement.textContent = JSON.stringify(error, null, 2);
                 });
         });
-
     </script>
 </body>
 </html>
