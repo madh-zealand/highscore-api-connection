@@ -1,10 +1,5 @@
 <?php
 
-require_once __DIR__ . '/api.php';
-
-$url = 'https://highscores.martindilling.com/api/v1/games';
-$response = apiGet($url);
-
 ?>
 <!doctype html>
 <html lang="en">
@@ -25,7 +20,7 @@ $response = apiGet($url);
         <div data-player class="player"></div>
         <div data-score class="score"></div>
         <button data-send-button class="send-button">Send</button>
-        <pre data-response-preview class="response-preview"><?php echo $response ? json_encode($response, JSON_PRETTY_PRINT) : '' ?></pre>
+        <pre data-response-preview class="response-preview"></pre>
     </div>
 
     <script>
@@ -49,6 +44,34 @@ $response = apiGet($url);
 
             return `${randomFirstName} ${randomLastName}`;
         }
+
+        sendButton.addEventListener('click', () => {
+            fetch(
+                'submit-highscore.php',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        player: player,
+                        score: score,
+                    }),
+                }
+            )
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (data) {
+                    console.log(data);
+                    responsePreviewElement.textContent = JSON.stringify(data, null, 2);
+                })
+                .catch(function (error){
+                    console.error(error);
+                    responsePreviewElement.textContent = JSON.stringify(error, null, 2);
+                });
+        });
+
     </script>
 </body>
 </html>
