@@ -4,6 +4,8 @@ $config = require 'config.php';
 
 function apiCall(string $method, string $url, ?array $payload = null): array
 {
+    global $config;
+
     $headers = [
         'Accept: application/json',
         'Content-type: application/json',
