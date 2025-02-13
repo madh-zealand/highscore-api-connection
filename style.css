@@ -13,6 +13,14 @@ body {
     left: 8px;
     color: #54585a;
 }
+.admin {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+}
+.admin a {
+    color: #54585a;
+}
 .credits {
     position: absolute;
     bottom: 8px;

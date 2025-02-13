@@ -13,6 +13,11 @@
     <div class="title">
         Highscore API Connection
     </div>
+    <?php if (isset($_SERVER['PHP_AUTH_USER'])): ?>
+    <div class="admin">
+        <a href="admin.php">Admin</a>
+    </div>
+    <?php endif; ?>
     <div class="credits">
         <a href="https://github.com/madh-zealand/highscores-api" target="_blank">Highscores API Github</a>
     </div>
