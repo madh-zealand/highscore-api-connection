@@ -21,8 +21,8 @@ if (
     exit;
 }
 
-// Handle delete post actions
-if ($_POST && isset($_POST['delete'], $_POST['game-id'])) {
+// Handle delete game post actions
+if ($_POST && isset($_POST['delete-game'], $_POST['game-id'])) {
     $gameId = $_POST['game-id'];
 
     $response = apiDelete("games/{$gameId}");
@@ -30,12 +30,22 @@ if ($_POST && isset($_POST['delete'], $_POST['game-id'])) {
     exit;
 }
 
-// Handle create post actions
+// Handle create game post actions
 if ($_POST && isset($_POST['save'], $_POST['title'])) {
     $title = $_POST['title'];
     $response = apiPost('games', [
         'title' => $title,
     ]);
+    header("Location: admin.php");
+    exit;
+}
+
+// Handle delete highscore post actions
+if ($_POST && isset($_POST['delete-highscore'], $_POST['game-id'], $_POST['highscore-id'])) {
+    $gameId = $_POST['game-id'];
+    $highscoreId = $_POST['highscore-id'];
+
+    $response = apiDelete("games/{$gameId}/highscores/{$highscoreId}");
     header("Location: admin.php");
     exit;
 }
@@ -74,7 +84,7 @@ foreach ($games as $index => $game) {
             <div class="game-title">
                 <input form="new-game-form" type="text" name="title" placeholder="Game title...">
             </div>
-            <div class="game-actions">
+            <div class="game-new-actions">
                 <form id="new-game-form" method="post">
                     <button type="submit" name="save">
                         Save
@@ -94,7 +104,7 @@ foreach ($games as $index => $game) {
                     <div class="game-actions">
                         <form method="post">
                             <input type="hidden" id="game-id" name="game-id" value="<?php echo $game['id'] ?>">
-                            <button type="submit" name="delete">
+                            <button type="submit" name="delete-game">
                                 Delete
                             </button>
                         </form>
@@ -108,6 +118,15 @@ foreach ($games as $index => $game) {
                             </div>
                             <div class="highscore-player">
                                 <?php echo $highscore['player'] ?>
+                            </div>
+                            <div class="highscore-actions">
+                                <form method="post">
+                                    <input type="hidden" name="game-id" value="<?php echo $game['id'] ?>">
+                                    <input type="hidden" name="highscore-id" value="<?php echo $highscore['id'] ?>">
+                                    <button type="submit" name="delete-highscore">
+                                        Delete
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     <?php endforeach; ?>

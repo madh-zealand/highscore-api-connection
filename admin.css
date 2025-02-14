@@ -37,11 +37,15 @@ form {
     padding: 8px 0;
     border-bottom: 2px solid #6d7c91;
 }
+.game-title {
+    flex: 1;
+}
 .highscore-info {
     display: flex;
     flex-direction: column;
     gap: 4px;
     font-size: 0.7em;
+    padding: 8px 0;
 }
 .highscore {
     display: flex;
@@ -55,14 +59,23 @@ form {
     flex: 1;
     text-align: left;
 }
-
-.game-title {
-    flex: 1;
-}
-
-.game-actions {
+.game-actions button,
+.highscore-actions button {
     font-size: 0.8em;
+    padding: 3px 8px 2px;
+    color: #ffe4e6;
+    background: #e11d48;
+    border: 1px solid #881337;
+    border-radius: 3px;
 }
+.game-new-actions button {
+     font-size: 0.8em;
+     padding: 3px 8px 2px;
+     color: #d1fae5;
+     background: #059669;
+     border: 1px solid #064e3b;
+     border-radius: 3px;
+ }
 
 .game-new {
     display: flex;
