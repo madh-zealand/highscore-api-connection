@@ -25,7 +25,7 @@ if (
 if ($_POST && isset($_POST['delete'], $_POST['game-id'])) {
     $gameId = $_POST['game-id'];
 
-    $response = apiDelete("https://highscores.martindilling.com/api/v1/games/{$gameId}");
+    $response = apiDelete("games/{$gameId}");
     header("Location: admin.php");
     exit;
 }
@@ -33,7 +33,7 @@ if ($_POST && isset($_POST['delete'], $_POST['game-id'])) {
 // Handle create post actions
 if ($_POST && isset($_POST['save'], $_POST['title'])) {
     $title = $_POST['title'];
-    $response = apiPost('https://highscores.martindilling.com/api/v1/games', [
+    $response = apiPost('games', [
         'title' => $title,
     ]);
     header("Location: admin.php");
@@ -41,7 +41,7 @@ if ($_POST && isset($_POST['save'], $_POST['title'])) {
 }
 
 // Fetch all games
-$response = apiGet('https://highscores.martindilling.com/api/v1/games');
+$response = apiGet('games');
 $games = $response['data'];
 
 ?>

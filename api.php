@@ -12,10 +12,12 @@ function apiCall(string $method, string $url, ?array $payload = null): array
         'Authorization: Bearer ' . $config['api_token'],
     ];
 
+    $baseUrl = rtrim($config['api_base_url'], '/') . '/';
+
     $curl = curl_init();
     curl_setopt_array($curl, [
         CURLOPT_CUSTOMREQUEST => $method,
-        CURLOPT_URL => $url,
+        CURLOPT_URL => $baseUrl . $url,
         CURLOPT_HTTPHEADER => $headers,
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_SSL_VERIFYPEER => $config['environment'] === 'production',
