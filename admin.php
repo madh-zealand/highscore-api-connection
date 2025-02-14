@@ -26,7 +26,7 @@ if ($_POST && isset($_POST['delete'], $_POST['game-id'])) {
     $gameId = $_POST['game-id'];
 
     $response = apiDelete("https://highscores.martindilling.com/api/v1/games/{$gameId}");
-    header("Location: /admin.php");
+    header("Location: admin.php");
     exit;
 }
 
@@ -36,7 +36,7 @@ if ($_POST && isset($_POST['save'], $_POST['title'])) {
     $response = apiPost('https://highscores.martindilling.com/api/v1/games', [
         'title' => $title,
     ]);
-    header("Location: /admin.php");
+    header("Location: admin.php");
     exit;
 }
 
