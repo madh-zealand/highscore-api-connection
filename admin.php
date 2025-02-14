@@ -44,6 +44,17 @@ if ($_POST && isset($_POST['save'], $_POST['title'])) {
 $response = apiGet('games');
 $games = $response['data'];
 
+foreach ($games as $index => $game) {
+    $response = apiGet("games/{$game['id']}/highscores");
+    $highscores = $response['data'];
+
+    usort($highscores, function ($a, $b) {
+        return $b['score'] <=> $a['score'];
+    });
+
+    $games[$index]['highscores'] = $highscores;
+}
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -73,19 +84,33 @@ $games = $response['data'];
         </div>
         <?php foreach ($games as $game): ?>
             <div class="game-listing">
-                <div class="game-id">
-                    <?php echo $game['id'] ?>
+                <div class="game-info">
+                    <div class="game-id">
+                        <?php echo $game['id'] ?>
+                    </div>
+                    <div class="game-title">
+                        <?php echo $game['title'] ?>
+                    </div>
+                    <div class="game-actions">
+                        <form method="post">
+                            <input type="hidden" id="game-id" name="game-id" value="<?php echo $game['id'] ?>">
+                            <button type="submit" name="delete">
+                                Delete
+                            </button>
+                        </form>
+                    </div>
                 </div>
-                <div class="game-title">
-                    <?php echo $game['title'] ?>
-                </div>
-                <div class="game-actions">
-                    <form method="post">
-                        <input type="hidden" id="game-id" name="game-id" value="<?php echo $game['id'] ?>">
-                        <button type="submit" name="delete">
-                            Delete
-                        </button>
-                    </form>
+                <div class="highscore-info">
+                    <?php foreach ($game['highscores'] as $highscore): ?>
+                        <div class="highscore">
+                            <div class="highscore-score">
+                                <?php echo $highscore['score'] ?>
+                            </div>
+                            <div class="highscore-player">
+                                <?php echo $highscore['player'] ?>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
             </div>
         <?php endforeach; ?>
