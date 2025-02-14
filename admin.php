@@ -1,6 +1,7 @@
 <?php
 
 $config = require 'config.php';
+require 'api.php';
 
 // If not authenticated, ask to log in
 if (!isset($_SERVER['PHP_AUTH_USER'])) {
@@ -20,6 +21,29 @@ if (
     exit;
 }
 
+// Handle delete post actions
+if ($_POST && isset($_POST['delete'], $_POST['game-id'])) {
+    $gameId = $_POST['game-id'];
+
+    $response = apiDelete("https://highscores.martindilling.com/api/v1/games/{$gameId}");
+    header("Location: /admin.php");
+    exit;
+}
+
+// Handle create post actions
+if ($_POST && isset($_POST['save'], $_POST['title'])) {
+    $title = $_POST['title'];
+    $response = apiPost('https://highscores.martindilling.com/api/v1/games', [
+        'title' => $title,
+    ]);
+    header("Location: /admin.php");
+    exit;
+}
+
+// Fetch all games
+$response = apiGet('https://highscores.martindilling.com/api/v1/games');
+$games = $response['data'];
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -33,8 +57,38 @@ if (
     <div class="logout">
         <a data-button-logout href="#">Logout</a>
     </div>
+
     <div class="container">
-        Secure admin site
+        <div class="game-new">
+            <div class="game-title">
+                <input form="new-game-form" type="text" name="title" placeholder="Game title...">
+            </div>
+            <div class="game-actions">
+                <form id="new-game-form" method="post">
+                    <button type="submit" name="save">
+                        Save
+                    </button>
+                </form>
+            </div>
+        </div>
+        <?php foreach ($games as $game): ?>
+            <div class="game-listing">
+                <div class="game-id">
+                    <?php echo $game['id'] ?>
+                </div>
+                <div class="game-title">
+                    <?php echo $game['title'] ?>
+                </div>
+                <div class="game-actions">
+                    <form method="post">
+                        <input type="hidden" id="game-id" name="game-id" value="<?php echo $game['id'] ?>">
+                        <button type="submit" name="delete">
+                            Delete
+                        </button>
+                    </form>
+                </div>
+            </div>
+        <?php endforeach; ?>
     </div>
 
     <script>
